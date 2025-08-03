@@ -5,12 +5,13 @@ from torch import nn
 import torch.nn.functional as F
 
 try:
-    from flash_attn_interface import flash_attn_func  # type: ignore[import]
-except Exception:  # pragma: no cover - flash attention not available
     try:
-        from flash_attn import flash_attn_func  # type: ignore[import]
+        from flash_attn_interface import flash_attn_func  # type: ignore[import]
     except Exception:  # pragma: no cover - flash attention not available
-        flash_attn_func = None  # type: ignore
+        from flash_attn import flash_attn_func  # type: ignore[import]
+except Exception:  # pragma: no cover - flash attention not available
+    flash_attn_func = None  # type: ignore
+    # flash_attn_func being None signals the fallback path
 
 from models.common import trunc_normal_init_
 
